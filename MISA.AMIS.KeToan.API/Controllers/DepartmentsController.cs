@@ -55,6 +55,12 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
         }
 
+        /// <summary>
+        /// API Lấy thông tin đơn vị theo ID
+        /// </summary>
+        /// <param name="departmentID"></param>
+        /// <returns>Thông tin đơn vị</returns>
+        /// Created by: NQDONG (06/11/2022)
         [HttpGet("{departmentID}")]
         public IActionResult GetDepartmentByID([FromRoute] Guid departmentID)
         {
@@ -95,8 +101,14 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
         }
 
+        /// <summary>
+        /// API Lấy danh sách đơn vị theo từ khóa
+        /// </summary>
+        /// <param name="keyword">Từ khóa người dùng nhập</param>
+        /// <returns>Danh sách đơn vị theo từ khóa</returns>
+        /// Created by: NQDONG (06/11/2022)
         [HttpGet("filter")]
-        public IActionResult getDepartmentsByFilter([FromQuery] string? keyword)
+        public IActionResult GetDepartmentsByFilter([FromQuery] string? keyword)
         {
             try
             {
