@@ -1,4 +1,4 @@
-﻿namespace MISA.AMIS.KeToan.API.Entities
+﻿namespace MISA.AMIS.KeToan.Common.Entities
 {
     /// <summary>
     /// Đơn vị

@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MISA.AMIS.KeToan.API.Entities.DTO;
-using MISA.AMIS.KeToan.API.Entities;
-using MISA.AMIS.KeToan.API.Enums;
+﻿using Microsoft.AspNetCore.Mvc;
+using MISA.AMIS.KeToan.Common.Entities;
 using MySqlConnector;
 using Dapper;
 using System.Data;
@@ -16,6 +13,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
         // Khởi tạo kết nối tới DB MySQL
         private readonly string connectionString = "Server=localhost;Port=3307;Database=misa.web09.ctm.nqdong;Uid=root;Pwd=Dongtham030900!;";
 
+        #region Method
         /// <summary>
         /// API Lấy danh sách thông tin tất cả nhân viên
         /// </summary>
@@ -143,7 +141,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
                 var employeeList = resultReturn.Read<dynamic>().ToList();
                 var countList = resultReturn.Read<dynamic>().ToList();
                 long totalRecord = countList?.FirstOrDefault()?.TotalRecord;
-                decimal totalPage = Math.Ceiling((decimal)totalRecord/pageSize);
+                decimal totalPage = Math.Ceiling((decimal)totalRecord / pageSize);
 
                 // Xử lý kết quả trả về
                 if (employeeList.Count > 0)
@@ -217,7 +215,8 @@ namespace MISA.AMIS.KeToan.API.Controllers
         [HttpPost]
         public IActionResult InsertEmployee([FromBody] Employee employee)
         {
-            try {
+            try
+            {
                 // Khởi tạo kết nối tới DB MySQL
                 var mySqlConnection = new MySqlConnection(connectionString);
 
@@ -230,14 +229,14 @@ namespace MISA.AMIS.KeToan.API.Controllers
                 var newEmployeeID = Guid.NewGuid();
                 foreach (var prop in employee.GetType().GetProperties())
                 {
-                    if(prop.Name == "EmployeeID")
+                    if (prop.Name == "EmployeeID")
                     {
                         parameters.Add("@EmployeeID", newEmployeeID);
                     }
                     else
                     {
                         parameters.Add("@" + prop.Name, prop.GetValue(employee, null));
-                    } 
+                    }
                 }
 
                 //var newParameters = new Dictionary<dynamic, dynamic>();
@@ -303,10 +302,11 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     {
                         parameters.Add("@EmployeeID", employeeID);
                     }
-                    else {
+                    else
+                    {
                         parameters.Add("@" + prop.Name, prop.GetValue(employee, null));
                     }
-                        
+
                 }
 
                 // Thực hiện gọi vào DB
@@ -452,6 +452,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     TraceId = HttpContext.TraceIdentifier
                 });
             }
-        }
+        } 
+        #endregion
     }
 }

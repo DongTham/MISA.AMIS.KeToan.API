@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MISA.AMIS.KeToan.API.Entities;
+using MISA.AMIS.KeToan.Common.Entities;
 
 namespace MISA.AMIS.KeToan.API.Controllers
 {

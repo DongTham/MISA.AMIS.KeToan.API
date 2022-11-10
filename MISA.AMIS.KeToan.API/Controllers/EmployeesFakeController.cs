@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Dapper;
-using MySqlConnector;
-using MISA.AMIS.KeToan.API.Entities;
-using MISA.AMIS.KeToan.API.Entities.DTO;
-using MISA.AMIS.KeToan.API.Enums;
+﻿using Microsoft.AspNetCore.Mvc;
+using MISA.AMIS.KeToan.Common.Entities;
+using MISA.AMIS.KeToan.Common.Enums;
 
 namespace MISA.AMIS.KeToan.API.Controllers
 {

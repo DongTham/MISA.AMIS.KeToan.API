@@ -1,4 +1,4 @@
-﻿namespace MISA.AMIS.KeToan.API.Entities.DTO
+﻿namespace MISA.AMIS.KeToan.Common.Entities
 {
     /// <summary>
     /// Kết quả trả về của API Lấy danh sách nhân viên theo bộ lọc và phân trang

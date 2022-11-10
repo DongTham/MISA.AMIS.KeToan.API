@@ -1,6 +1,6 @@
-﻿using MISA.AMIS.KeToan.API.Enums;
+﻿using MISA.AMIS.KeToan.Common.Enums;
 
-namespace MISA.AMIS.KeToan.API.Entities
+namespace MISA.AMIS.KeToan.Common.Entities
 {
     /// <summary>
     /// Nhân viên
