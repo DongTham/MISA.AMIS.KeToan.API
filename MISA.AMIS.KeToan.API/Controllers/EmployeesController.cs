@@ -115,7 +115,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
         [HttpGet("filter")]
         public IActionResult GetEmployeesByFilterAndPaging(
             [FromQuery] string? keyword,
-            [FromQuery] string sort = "EmployeeID ASC",
+            [FromQuery] string? sort = "EmployeeID ASC",
             [FromQuery] int pageSize = 10,
             [FromQuery] int pageNumber = 1
             )
@@ -239,6 +239,9 @@ namespace MISA.AMIS.KeToan.API.Controllers
                         parameters.Add("@" + prop.Name, prop.GetValue(employee, null));
                     } 
                 }
+
+                //var newParameters = new Dictionary<dynamic, dynamic>();
+                //newParameters.Add("@EmployeeID", newEmployeeID);
 
                 // Thực hiện gọi vào DB
                 int numberOfRowsAffected = mySqlConnection.Execute(storeProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
