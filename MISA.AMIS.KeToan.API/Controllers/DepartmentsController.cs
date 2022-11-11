@@ -12,7 +12,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
     public class DepartmentsController : ControllerBase
     {
         // Khởi tạo kết nối tới DB MySQL
-        private readonly string connectionString = "Server=localhost;Port=3307;Database=misa.web09.ctm.nqdong;Uid=root;Pwd=Dongtham030900!;";
+        private readonly string connectionString = "Server=localhost;Port=3306;Database=misa.web09.ctm.nqdong;Uid=root;Pwd=Dongtham030900!;";
 
         /// <summary>
         /// API Lấy danh sách tất cả đơn vị

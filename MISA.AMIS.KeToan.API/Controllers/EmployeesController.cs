@@ -11,7 +11,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
     public class EmployeesController : ControllerBase
     {
         // Khởi tạo kết nối tới DB MySQL
-        private readonly string connectionString = "Server=localhost;Port=3307;Database=misa.web09.ctm.nqdong;Uid=root;Pwd=Dongtham030900!;";
+        private readonly string connectionString = "Server=localhost;Port=3306;Database=misa.web09.ctm.nqdong;Uid=root;Pwd=Dongtham030900!;";
 
         #region Method
         /// <summary>
@@ -138,15 +138,15 @@ namespace MISA.AMIS.KeToan.API.Controllers
 
                 // Thực hiện gọi vào DB
                 var resultReturn = mySqlConnection.QueryMultiple(storeProcedureName, parameters, commandType: CommandType.StoredProcedure);
-                var employeeList = resultReturn.Read<dynamic>().ToList();
+                var employees = resultReturn.Read<dynamic>().ToList();
                 var countList = resultReturn.Read<dynamic>().ToList();
                 long totalRecord = countList?.FirstOrDefault()?.TotalRecord;
                 decimal totalPage = Math.Ceiling((decimal)totalRecord / pageSize);
 
                 // Xử lý kết quả trả về
-                if (employeeList.Count > 0)
+                if (employees.Count > 0)
                 {
-                    return StatusCode(StatusCodes.Status200OK, new { employeeList, totalRecord, totalPage });
+                    return StatusCode(StatusCodes.Status200OK, new { employees, totalRecord, totalPage });
                 }
 
                 return StatusCode(StatusCodes.Status200OK, new { employees = new List<Employee>(), totalRecord, totalPage });
