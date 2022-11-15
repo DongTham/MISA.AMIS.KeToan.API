@@ -1,15 +1,19 @@
 ﻿using MISA.AMIS.KeToan.Common.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace MISA.AMIS.KeToan.Common.Entities
 {
     /// <summary>
     /// Nhân viên
     /// </summary>
-    public class Employee
+    public class Employee : BaseEntity
     {
+        #region Property
+
         /// <summary>
         /// ID nhân viên
         /// </summary>
+        [Key]
         public Guid EmployeeID { get; set; }
 
         /// <summary>
@@ -100,26 +104,8 @@ namespace MISA.AMIS.KeToan.Common.Entities
         /// <summary>
         /// Tên chi nhánh ngân hàng
         /// </summary>
-        public string? BankBranchName { get; set; }
+        public string? BankBranchName { get; set; }        
 
-        /// <summary>
-        /// Thời gian tạo
-        /// </summary>
-        public DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// Người tạo
-        /// </summary>
-        public string? CreatedBy { get; set; }
-
-        /// <summary>
-        /// Thời gian sửa gần nhất
-        /// </summary>
-        public DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// Người sửa gần nhất
-        /// </summary>
-        public string? ModifiedBy { get; set; }
+        #endregion
     }
 }

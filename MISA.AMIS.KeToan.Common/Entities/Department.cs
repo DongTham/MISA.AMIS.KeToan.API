@@ -3,8 +3,10 @@
     /// <summary>
     /// Đơn vị
     /// </summary>
-    public class Department
+    public class Department : BaseEntity
     {
+        #region Property
+
         /// <summary>
         /// ID của đơn vị
         /// </summary>
@@ -20,24 +22,6 @@
         /// </summary>
         public string DepartmentName { get; set; }
 
-        /// <summary>
-        /// Thời gian tạo
-        /// </summary>
-        public DateTime CreatedDate { get; set; }
-
-        /// <summary>
-        /// Người tạo
-        /// </summary>
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// Thời gian sửa gần nhất
-        /// </summary>
-        public DateTime ModifiedDate { get; set; }
-
-        /// <summary>
-        /// Người sửa gần nhất
-        /// </summary>
-        public string ModifiedBy { get; set; }
+        #endregion
     }
 }
