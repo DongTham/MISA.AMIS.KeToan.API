@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MISA.AMIS.KeToan.BL\MISA.AMIS.KeToan.BL.csproj" />
     <ProjectReference Include="..\MISA.AMIS.KeToan.Common\MISA.AMIS.KeToan.Common.csproj" />
+    <ProjectReference Include="..\MISA.AMIS.KeToan.ErrorLog\MISA.AMIS.KeToan.ErrorLog.csproj" />
   </ItemGroup>
 
 </Project>

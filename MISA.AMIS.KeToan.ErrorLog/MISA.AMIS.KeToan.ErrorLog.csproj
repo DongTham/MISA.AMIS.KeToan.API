@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MISA.AMIS.KeToan.Common\MISA.AMIS.KeToan.Common.csproj" />
+  </ItemGroup>
+
 </Project>
