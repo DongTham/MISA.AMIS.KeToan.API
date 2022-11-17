@@ -1,0 +1,5 @@
+{
+	"ConnectionStrings": {
+		"Mysql": "Server=localhost;Port=3307;Database=misa.web09.ctm.nqdong;Uid=root;Pwd=Dongtham030900!;"
+	}
+}

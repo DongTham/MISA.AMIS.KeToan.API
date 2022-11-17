@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MISA.AMIS.KeToan.Common.Entities;
-using MySqlConnector;
-using Dapper;
-using System.Data;
 using MISA.AMIS.KeToan.BL;
-using MISA.AMIS.KeToan.DL;
 using MISA.AMIS.KeToan.Common.Resources;
 using MISA.AMIS.KeToan.Common.Enums;
-using MISA.AMIS.KeToan.Common.Constants;
 
 namespace MISA.AMIS.KeToan.API.Controllers
 {
@@ -233,6 +228,29 @@ namespace MISA.AMIS.KeToan.API.Controllers
                 });
             }
         }
+
+        //private ServiceResponse ValidateRequestData(Employee employee)
+        //{
+        //    var properties = typeof(Employee).GetProperties();
+        //    var validateFailures = new List<string>();
+        //    foreach(var property in properties)
+        //    {
+        //        var propertyValue = property.GetValue(employee);
+        //        var requiredAttribute = (RequiredAttribute?)Attribute.GetCustomAttribute(property, typeof(RequiredAttribute));
+        //        if(requiredAttribute != null && string.IsNullOrEmpty(propertyValue?.ToString()))
+        //        {
+        //            validateFailures.Add(requiredAttribute.ErrorMessage);
+        //        }
+        //    }
+
+        //    if(validateFailures.Count > 0)
+        //    {
+        //        return new ServiceResponse
+        //        {
+        //            Success = false
+        //        }
+        //    }
+        //}
 
         #endregion
     }
