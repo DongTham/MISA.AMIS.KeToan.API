@@ -1,10 +1,6 @@
 ﻿using MISA.AMIS.KeToan.Common.Entities;
 using MISA.AMIS.KeToan.Common.Entities.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
 
 namespace MISA.AMIS.KeToan.BL
 {
@@ -49,5 +45,12 @@ namespace MISA.AMIS.KeToan.BL
         /// <returns>Status code 200</returns>
         /// Created by: NQDONG (10/11/2022)
         public ResultForAction DeleteMultipleEmployees(ListEmployeeID listEmployeeID);
+
+        /// <summary>
+        /// API Xuất khẩu file excel danh sách tất cả nhân viên
+        /// </summary>
+        /// <returns>Dữ liệu DataTable để xuất file</returns>
+        /// Created by: NQDONG (18/11/2022)
+        public DataTable ExportEmployeesToExcel();
     }
 }

@@ -3,6 +3,7 @@ using MISA.AMIS.KeToan.Common.Entities;
 using MISA.AMIS.KeToan.BL;
 using MISA.AMIS.KeToan.Common.Resources;
 using MISA.AMIS.KeToan.Common.Enums;
+using ClosedXML.Excel;
 
 namespace MISA.AMIS.KeToan.API.Controllers
 {
@@ -227,6 +228,81 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     TraceId = HttpContext.TraceIdentifier
                 });
             }
+        }
+
+        /// <summary>
+        /// API Xuất khẩu file excel danh sách tất cả nhân viên
+        /// </summary>
+        /// <returns>file excel thông tin tất cả nhân viên</returns>
+        /// Created by: NQDONG (18/11/2022)
+        [HttpGet("exportAllRecord")]
+        public IActionResult ExportEmployeesToExcel()
+        {
+            try
+            {
+                var dataResult = _employeeBL.ExportEmployeesToExcel();
+
+                //using ClosedXML.Excel;
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    var ws = wb.AddWorksheet(dataResult);
+
+                    // Điều chỉnh độ rộng của ô vừa với độ dài của dữ liệu
+                    ws.Columns("A:I").AdjustToContents();
+
+                    // Tùy chỉnh style cho cột từ A đến I
+                    ws.Columns("A:I").Style.Font.SetFontName("Times New Roman").Font.SetFontSize(11).Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left).Alignment.SetWrapText(true);
+
+                    // Lấy dòng đầu tiên của bảng tính
+                    var table = ws.Tables.FirstOrDefault();
+                    if (table != null)
+                    {
+                        // Bỏ filter của bảng
+                        table.ShowAutoFilter = false;
+
+                        // Set kiểu viền và màu cho background
+                        table.Cells().Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin).Fill.SetBackgroundColor(XLColor.White);
+
+                        // Tùy chỉnh style cho header của bảng
+                        table.Row(1).Style.Font.SetFontColor(XLColor.FromTheme(XLThemeColor.Text1)).Fill.SetBackgroundColor(XLColor.LightGray).Font.SetFontName("Arial").Font.SetFontSize(10).Font.SetBold(true).Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                        // Căn giữa cho văn bản ở cột E (Ngày sinh)
+                        table.Column("E").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    }
+
+                    // Thêm 2 dòng phía trên
+                    ws.Row(1).InsertRowsAbove(2);
+
+                    // Gán giá trị cho ô A1
+                    ws.Cell("A1").SetValue("DANH SÁCH NHÂN VIÊN");
+
+                    // Tùy chỉnh style cho ô A1 và A2
+                    ws.Cells("A1,A2").Style.Font.SetBold(true).Font.SetFontSize(16).Font.SetFontName("Arial").Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                    // Merge từ A1 đến I1, từ A2 đến I2
+                    ws.Range("A1:I1").Merge();
+                    ws.Range("A2:I2").Merge();
+
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Danh_sach_nhan_vien" + DateTime.Now.ToString("dd-MM-yyyy hh-mm-ss") + ".xlsx");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                {
+                    ErrorCode = ErrorCode.Exception,
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Exception,
+                    MoreInfo = Resources.MoreInfo_Exception,
+                    TraceId = HttpContext.TraceIdentifier
+                });
+            }
+
         }
 
         //private ServiceResponse ValidateRequestData(Employee employee)
