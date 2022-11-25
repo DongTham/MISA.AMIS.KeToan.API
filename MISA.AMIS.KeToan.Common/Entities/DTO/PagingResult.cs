@@ -8,7 +8,7 @@
         /// <summary>
         /// Danh sách nhân viên
         /// </summary>
-        public List<T> Data { get; set; }
+        public List<dynamic> Data { get; set; }
 
         /// <summary>
         /// Tổng số bản ghi

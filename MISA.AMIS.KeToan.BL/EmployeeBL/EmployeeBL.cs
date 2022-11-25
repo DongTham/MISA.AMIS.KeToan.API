@@ -1,5 +1,6 @@
 ﻿using MISA.AMIS.KeToan.Common.Entities;
 using MISA.AMIS.KeToan.Common.Entities.DTO;
+using MISA.AMIS.KeToan.Common.Enums;
 using MISA.AMIS.KeToan.DL;
 using System.Data;
 
@@ -38,7 +39,7 @@ namespace MISA.AMIS.KeToan.BL
         /// API Thêm mới 1 nhân viên
         /// </summary>
         /// <param name="employee">Đối tượng nhân viên cần thêm mới</param>
-        /// <returns>ID của nhân viên vừa thêm mới, số bản ghi ảnh hưởng</returns>
+        /// <returns>Số bản ghi ảnh hưởng</returns>
         /// Created by: NQDONG (10/11/2022)
         public ResultForAction InsertEmployee(Employee employee)
         {
@@ -109,11 +110,46 @@ namespace MISA.AMIS.KeToan.BL
             foreach (var employee in employees)
             {
                 // Thêm dữ liệu của từng nhân viên cho 1 hàng
-                dataTable.Rows.Add(indexOfEmployee, employee.EmployeeCode, employee.EmployeeName, employee.Gender, employee.DateOfBirth?.ToString("dd-MM-yyyy"), employee.JobPositionName, employee.DepartmentID, employee.BankAccountNumber, employee.BankName);
+                dataTable.Rows.Add(indexOfEmployee, employee.EmployeeCode, employee.EmployeeName, ConvertToGenderVietnamese(employee.Gender), employee.DateOfBirth?.ToString("dd-MM-yyyy"), employee.JobPositionName, employee.DepartmentName, employee.BankAccountNumber, employee.BankName);
                 indexOfEmployee++;
             }
 
             return dataTable;
+        }
+
+        private string? ConvertToGenderVietnamese(int? gender)
+        {
+            switch (gender)
+            {
+                case 0:
+                    return "Nam";
+                case 1:
+                    return "Nữ";
+                case 2:
+                    return "Khác";
+                default:
+                    return gender.ToString();
+            }
+        }
+
+        /// <summary>
+        /// API kiểm tra mã nhân viên đã tồn tại hay chưa
+        /// </summary>
+        /// <param name="employeeCode">Mã nhân viên muốn kiểm tra</param>
+        /// <returns>Kết quả đã tồn tại hay chưa</returns>
+        /// Created by: NQDONG (18/11/2022)
+        public bool CheckDuplicateEmployeeCode(string employeeCode)
+        {
+            var result = _employeeDL.CheckDuplicateEmployeeCode(employeeCode);
+
+            if(result == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         #endregion

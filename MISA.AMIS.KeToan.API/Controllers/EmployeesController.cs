@@ -75,9 +75,9 @@ namespace MISA.AMIS.KeToan.API.Controllers
                 var dataResult = _employeeBL.InsertEmployee(employee);
 
                 // Xử lý kết quả trả về
-                if (dataResult.NumberOfRowsAffected > 0)
+                if (dataResult != null)
                 {
-                    return StatusCode(StatusCodes.Status201Created, dataResult.RecordID);
+                    return StatusCode(StatusCodes.Status201Created, new { EmployeeID = dataResult.RecordID });
                 }
 
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
@@ -215,6 +215,34 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     MoreInfo = "https://openapi.misa.com.vn/errorcode/2",
                     TraceId = HttpContext.TraceIdentifier
                 });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                {
+                    ErrorCode = ErrorCode.Exception,
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Exception,
+                    MoreInfo = Resources.MoreInfo_Exception,
+                    TraceId = HttpContext.TraceIdentifier
+                });
+            }
+        }
+
+        /// <summary>
+        /// API kiểm tra mã nhân viên đã tồn tại hay chưa
+        /// </summary>
+        /// <param name="employeeCode">Mã nhân viên muốn kiểm tra</param>
+        /// <returns>Kết quả đã tồn tại hay chưa</returns>
+        /// Created by: NQDONG (18/11/2022)
+        [HttpGet("checkDuplicateCode")]
+        public IActionResult CheckDuplicateEmployeeCode([FromQuery] string employeeCode)
+        {
+            try
+            {
+                var dataResult = _employeeBL.CheckDuplicateEmployeeCode(employeeCode);
+                return StatusCode(StatusCodes.Status200OK, new { IsDuplicateEmployeeCode = dataResult });
             }
             catch (Exception ex)
             {

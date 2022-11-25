@@ -50,5 +50,10 @@ namespace MISA.AMIS.KeToan.Common.Constants
         /// Tên của procedure xóa nhiều nhân viên
         /// </summary>
         public static string DELETE_MULTIPLE_EMPLOYEES = "Proc_employee_DeleteMultiple";
+
+        /// <summary>
+        /// Tên của procedure kiểm tra mã nhân viên đã tồn tại hay chưa
+        /// </summary>
+        public static string CHECK_DUPLICATE_EMPLOYEECODE = "Proc_employee_CheckDuplicateCode";
     }
 }

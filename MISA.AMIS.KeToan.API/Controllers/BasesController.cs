@@ -108,19 +108,23 @@ namespace MISA.AMIS.KeToan.API.Controllers
         /// <param name="pageSize">Số bản ghi muốn lấy</param>
         /// <param name="pageNumber">Số chỉ mục của trang muốn lấy</param>
         /// <param name="sort">Cột muốn sắp xếp theo</param>
+        /// <param name="order">Sắp xếp theo tăng dần hoặc giảm dần</param>
+        /// <param name="ids">Danh sách giá trị mà muốn đặt lên đầu khi kết quả trả về</param>
         /// <returns>Danh sách thông tin bản ghi và tổng số bản ghi</returns>
         /// Created by: NQDONG (06/11/2022)
         [HttpGet("filter")]
         public IActionResult GetRecordsByFilter(
             [FromQuery] string? keyword,
             [FromQuery] string? sort,
+            [FromQuery] string? ids,
+            [FromQuery] string? order = "ASC", 
             [FromQuery] int pageSize = 25,
             [FromQuery] int pageNumber = 1
             )
         {
             try
             {
-                var dataResult = _baseBL.GetRecordsByFilter(keyword, sort, pageSize, pageNumber);
+                var dataResult = _baseBL.GetRecordsByFilter(keyword, sort, order, ids, pageSize, pageNumber);
 
                 return StatusCode(StatusCodes.Status200OK, new { dataResult });
                 // Xử lý kết quả trả về

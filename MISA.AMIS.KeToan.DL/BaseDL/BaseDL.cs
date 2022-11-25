@@ -27,21 +27,18 @@ namespace MISA.AMIS.KeToan.DL
         /// </summary>
         /// <returns>Danh sách tất cả bản ghi</returns>
         /// Created by: NQDong (10/11/2022)
-        public IEnumerable<T> GetAllRecords()
+        public dynamic GetAllRecords()
         {
             // Chuẩn bị câu lệnh SQL
             string storeProcedureName = String.Format(Procedure.GET_ALL, typeof(T).Name);
-
-            var records = new List<T>();
 
             // Khởi tạo kết nối tới DB MySQL
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
                 // Thực hiện gọi vào DB
-                records = (List<T>)mySqlConnection.Query<T>(storeProcedureName, commandType: CommandType.StoredProcedure);
-            }
 
-            return records;
+                return mySqlConnection.Query(storeProcedureName, commandType: CommandType.StoredProcedure);
+            }
         }
 
         /// <summary>
@@ -50,7 +47,7 @@ namespace MISA.AMIS.KeToan.DL
         /// <param name="recordID">ID của bản ghi muốn lấy</param>
         /// <returns>Thông tin 1 bản ghi theo ID</returns>
         /// Created by: NQDong (10/11/2022)
-        public T GetRecordByID(Guid recordID)
+        public dynamic GetRecordByID(Guid recordID)
         {
             // Chuẩn bị câu lệnh SQL
             string storeProcedureName = String.Format(Procedure.GET_BY_ID, typeof(T).Name);
@@ -63,7 +60,7 @@ namespace MISA.AMIS.KeToan.DL
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
                 // Thực hiện gọi vào DB
-                var record = mySqlConnection.QueryFirstOrDefault<T>(storeProcedureName, parameters, commandType: CommandType.StoredProcedure);
+                var record = mySqlConnection.QueryFirstOrDefault(storeProcedureName, parameters, commandType: CommandType.StoredProcedure);
                 return record;
             }
         }
@@ -75,9 +72,11 @@ namespace MISA.AMIS.KeToan.DL
         /// <param name="sort">Cột muốn sắp xếp theo</param>
         /// <param name="pageSize">Số bản ghi muốn lấy</param>
         /// <param name="offset">Số bản ghi bỏ qua</param>
+        /// <param name="order">Sắp xếp theo tăng dần hoặc giảm dần</param>
+        /// <param name="ids">Danh sách giá trị mà muốn đặt lên đầu khi kết quả trả về</param>
         /// <returns>Danh sách thông tin bản ghi và tổng số bản ghi</returns>
         /// Created by: NQDONG (10/11/2022)
-        public PagingResult<T> GetRecordsByFilter(string? keyword, string sort, int pageSize, int offset)
+        public PagingResult<T> GetRecordsByFilter(string? keyword, string sort, string order, string ids, int pageSize, int offset)
         {
             // Chuẩn bị câu lệnh SQL
             string storeProcedureName = String.Format(Procedure.GET_BY_FILTER, typeof(T).Name);
@@ -89,15 +88,18 @@ namespace MISA.AMIS.KeToan.DL
             parameters.Add("@Sort", sort);
             parameters.Add("@Limit", pageSize);
             parameters.Add("@Offset", offset);
+            parameters.Add("Order", order);
+            parameters.Add("@IDs", ids);
+            parameters.Add("@SortByIDs", $"{typeof(T).Name}ID");
 
-            var records = new List<T>();
+            var records = new List<dynamic>();
 
             // Khởi tạo kết nối tới DB MySQL
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
                 // Thực hiện gọi vào DB
                 var resultReturn = mySqlConnection.QueryMultiple(storeProcedureName, parameters, commandType: CommandType.StoredProcedure);
-                records = resultReturn.Read<T>().ToList();
+                records = resultReturn.Read<dynamic>().ToList();
                 var countList = resultReturn.Read<dynamic>().ToList();
                 long totalRecords = countList?.FirstOrDefault()?.TotalRecord;
                 decimal totalPages = Math.Ceiling((decimal)totalRecords / pageSize);

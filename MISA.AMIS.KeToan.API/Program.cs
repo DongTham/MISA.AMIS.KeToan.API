@@ -42,7 +42,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("*");
+                          policy.WithOrigins("*").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithMethods("PUT", "DELETE", "GET", "POST");
                       });
 });
 
