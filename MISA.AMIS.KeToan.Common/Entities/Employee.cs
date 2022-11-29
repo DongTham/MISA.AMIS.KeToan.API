@@ -1,5 +1,6 @@
 ﻿using MISA.AMIS.KeToan.Common.Enums;
 using System.ComponentModel.DataAnnotations;
+using static MISA.AMIS.KeToan.Common.Attributes.PrimeryKeyAttribute;
 
 namespace MISA.AMIS.KeToan.Common.Entities
 {
@@ -14,17 +15,22 @@ namespace MISA.AMIS.KeToan.Common.Entities
         /// ID nhân viên
         /// </summary>
         [Key]
+        [PropertyName("ID nhân viên")]
         public Guid EmployeeID { get; set; }
 
         /// <summary>
         /// Mã nhân viên
         /// </summary>
-        public string EmployeeCode { get; set; }
+        [NotEmpty]
+        [PropertyName("Mã nhân viên")]
+        public string? EmployeeCode { get; set; }
 
         /// <summary>
         /// Tên nhân viên
         /// </summary>
-        public string EmployeeName { get; set; }
+        [NotEmpty]
+        [PropertyName("Tên nhân viên")]
+        public string? EmployeeName { get; set; }
 
         /// <summary>
         /// Có phải là khách hàng hay không
@@ -39,6 +45,7 @@ namespace MISA.AMIS.KeToan.Common.Entities
         /// <summary>
         /// Giới tính
         /// </summary>
+        [PropertyName("Giới tính")]
         public Gender? Gender { get; set; }
 
         /// <summary>
@@ -49,6 +56,8 @@ namespace MISA.AMIS.KeToan.Common.Entities
         /// <summary>
         /// Tên đơn vị
         /// </summary>
+        [NotEmpty]
+        [PropertyName("ID đơn vị")]
         public Guid DepartmentID { get; set; }
 
         /// <summary>

@@ -36,5 +36,14 @@ namespace MISA.AMIS.KeToan.DL
         /// <returns>Danh sách thông tin bản ghi và tổng số bản ghi</returns>
         /// Created by: NQDONG (10/11/2022)
         public PagingResult<T> GetRecordsByFilter(string? keyword, string sort, string order, string ids, int pageSize, int offset);
+
+        /// <summary>
+        /// API kiểm tra mã thêm mới đã tồn tại hay chưa
+        /// </summary>
+        /// <param name="recordCode">Mã muốn kiểm tra</param>
+        /// <param name="recordID">ID nhân viên đã tồn tại để lấy mã nhân viên tương ứng</param>
+        /// <returns>Số lượng mã đã tồn tại</returns>
+        /// Created by: NQDONG (18/11/2022)
+        public long CheckDuplicateCode(string recordCode, Guid recordID);
     }
 }

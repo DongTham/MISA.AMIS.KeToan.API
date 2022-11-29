@@ -121,6 +121,14 @@
     <value>Catched an exception.</value>
     <comment>Message trả về cho dev khi API gặp exception</comment>
   </data>
+  <data name="EmployeeCode_NotEmpty" xml:space="preserve">
+    <value>Mã nhân viên không được để trống!</value>
+    <comment>Message trả về cho user khi để trống trường Mã nhân viên</comment>
+  </data>
+  <data name="InfoNotEmpty" xml:space="preserve">
+    <value>{0} không được để trống!</value>
+    <comment>Message trả về cho user khi để trống các trường không được phép null</comment>
+  </data>
   <data name="MoreInfo_Exception" xml:space="preserve">
     <value>https://openapi.misa.com.vn/errorcode/1</value>
     <comment>Thông tin chi tiết của lỗi khi gọi API gặp exception</comment>
@@ -128,5 +136,9 @@
   <data name="UserMsg_Exception" xml:space="preserve">
     <value>Có lỗi xảy ra! Vui lòng liên hệ với MISA.</value>
     <comment>Message trả về cho user khi API gặp exception</comment>
+  </data>
+  <data name="ValidateException" xml:space="preserve">
+    <value>Dữ liệu không hợp lệ, Vui lòng kiểm tra lại!</value>
+    <comment>Message trả về cho user khi thông tin nhập vào không hợp lệ</comment>
   </data>
 </root>

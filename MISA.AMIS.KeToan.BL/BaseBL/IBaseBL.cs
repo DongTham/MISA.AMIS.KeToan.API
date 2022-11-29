@@ -35,6 +35,15 @@ namespace MISA.AMIS.KeToan.BL
         /// <param name="ids">Danh sách giá trị mà muốn đặt lên đầu khi kết quả trả về</param>
         /// <returns>Danh sách thông tin bản ghi và tổng số bản ghi</returns>
         /// Created by: NQDONG (10/11/2022)
-        public PagingResult<T> GetRecordsByFilter(string? keyword, string? sort, string order, string? ids, int pageSize, int pageNumber);
+        public PagingResult<T> GetRecordsByFilter(string? keyword, string? sort, string? order, string? ids, int pageSize, int pageNumber);
+
+        /// <summary>
+        /// API kiểm tra mã thêm mới đã tồn tại hay chưa
+        /// </summary>
+        /// <param name="recordCode">Mã muốn kiểm tra</param>
+        /// <param name="recordID">ID nhân viên đã tồn tại để lấy mã nhân viên tương ứng</param>
+        /// <returns>Số lượng mã đã tồn tại</returns>
+        /// Created by: NQDONG (18/11/2022)
+        public bool CheckDuplicateCode(string recordCode, Guid recordID);
     }
 }

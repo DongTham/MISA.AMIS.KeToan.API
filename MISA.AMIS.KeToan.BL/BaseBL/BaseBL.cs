@@ -1,11 +1,9 @@
 ﻿using MISA.AMIS.KeToan.Common.Entities;
+using MISA.AMIS.KeToan.Common.Enums;
+using MISA.AMIS.KeToan.Common.Exceptions;
+using MISA.AMIS.KeToan.Common.Resources;
 using MISA.AMIS.KeToan.DL;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static MISA.AMIS.KeToan.Common.Attributes.PrimeryKeyAttribute;
 
 namespace MISA.AMIS.KeToan.BL
 {
@@ -60,7 +58,7 @@ namespace MISA.AMIS.KeToan.BL
         /// <param name="ids">Danh sách giá trị mà muốn đặt lên đầu khi kết quả trả về</param>
         /// <returns>Danh sách thông tin bản ghi và tổng số bản ghi</returns>
         /// Created by: NQDONG (10/11/2022)
-        public PagingResult<T> GetRecordsByFilter(string? keyword, string? sort, string order, string? ids, int pageSize, int pageNumber)
+        public PagingResult<T> GetRecordsByFilter(string? keyword, string? sort, string? order, string? ids, int pageSize, int pageNumber)
         {
             int offset = pageSize * (pageNumber - 1);
             if (string.IsNullOrEmpty(sort))
@@ -73,6 +71,55 @@ namespace MISA.AMIS.KeToan.BL
             }
 
             return _baseDL.GetRecordsByFilter(keyword, sort, order, ids,  pageSize, offset);
+        }
+
+        /// <summary>
+        /// API kiểm tra mã thêm mới đã tồn tại hay chưa
+        /// </summary>
+        /// <param name="recordCode">Mã muốn kiểm tra</param>
+        /// <param name="recordID">ID nhân viên đã tồn tại để lấy mã nhân viên tương ứng</param>
+        /// <returns>Số lượng mã đã tồn tại</returns>
+        /// Created by: NQDONG (18/11/2022)
+        public bool CheckDuplicateCode(string recordCode, Guid recordID)
+        {
+            var result = _baseDL.CheckDuplicateCode(recordCode, recordID);
+
+            if (result == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Kiểm tra dữ liệu nhập vào có hợp lệ hay không
+        /// </summary>
+        /// <param name="record">dữ liệu người dùng nhập vào</param>
+        /// <exception cref="ValidateException">Exception lỗi dữ liệu không hợp lệ</exception>
+        public void ValidateData(T record)
+        {
+            var props = record?.GetType().GetProperties();
+            var propNotEmpty = props?.Where(p => Attribute.IsDefined(p, typeof(NotEmpty)));
+
+            foreach (var prop in propNotEmpty)
+            {
+                var propValue = prop.GetValue(record);
+                var propName = prop.Name;
+                var nameDisplay = string.Empty;
+                var propertyNames = prop.GetCustomAttributes(typeof(PropertyName), true);
+                if (propertyNames.Length > 0)
+                {
+                    nameDisplay = (propertyNames[0] as PropertyName).Name;
+                }
+                if (propValue == null || string.IsNullOrEmpty(propValue.ToString()))
+                {
+                    nameDisplay = (nameDisplay == string.Empty ? propName : nameDisplay);
+                    throw new ValidateException(string.Format(Resources.InfoNotEmpty, nameDisplay), ErrorCode.InvalidData);
+                }
+            }
         }
 
         #endregion

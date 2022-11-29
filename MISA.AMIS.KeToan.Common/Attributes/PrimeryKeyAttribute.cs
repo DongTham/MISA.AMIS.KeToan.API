@@ -19,7 +19,29 @@ namespace MISA.AMIS.KeToan.Common.Attributes
         public PrimeryKeyAttribute(string? errorMessage)
         {
             ErrorMessage = errorMessage;
-        } 
+        }
+
+        [AttributeUsage(AttributeTargets.Property)]
+        public class NotEmpty : Attribute
+        {
+        }
+
+        [AttributeUsage(AttributeTargets.Property)]
+        public class PropertyName : Attribute
+        {
+            public string? Name = string.Empty;
+
+            public PropertyName(string name)
+            {
+                this.Name = name;
+            }
+        }
+
+        [AttributeUsage(AttributeTargets.Property)]
+        public class ValidateDateTime : Attribute
+        {
+
+        }
 
         #endregion
     }

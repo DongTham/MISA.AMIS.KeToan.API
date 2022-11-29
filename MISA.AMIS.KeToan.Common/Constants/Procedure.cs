@@ -54,6 +54,6 @@ namespace MISA.AMIS.KeToan.Common.Constants
         /// <summary>
         /// Tên của procedure kiểm tra mã nhân viên đã tồn tại hay chưa
         /// </summary>
-        public static string CHECK_DUPLICATE_EMPLOYEECODE = "Proc_employee_CheckDuplicateCode";
+        public static string CHECK_DUPLICATE_CODE = "Proc_{0}_CheckDuplicateCode";
     }
 }

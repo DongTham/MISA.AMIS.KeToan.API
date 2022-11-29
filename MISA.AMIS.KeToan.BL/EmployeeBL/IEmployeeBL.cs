@@ -52,13 +52,5 @@ namespace MISA.AMIS.KeToan.BL
         /// <returns>Dữ liệu DataTable để xuất file</returns>
         /// Created by: NQDONG (18/11/2022)
         public DataTable ExportEmployeesToExcel();
-
-        /// <summary>
-        /// API kiểm tra mã nhân viên đã tồn tại hay chưa
-        /// </summary>
-        /// <param name="employeeCode">Mã nhân viên muốn kiểm tra</param>
-        /// <returns>Kết quả đã tồn tại hay chưa</returns>
-        /// Created by: NQDONG (18/11/2022)
-        public bool CheckDuplicateEmployeeCode(string employeeCode);
     }
 }

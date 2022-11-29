@@ -110,6 +110,32 @@ namespace MISA.AMIS.KeToan.DL
             }
         }
 
+        /// <summary>
+        /// API kiểm tra mã thêm mới đã tồn tại hay chưa
+        /// </summary>
+        /// <param name="recordCode">Mã muốn kiểm tra</param>
+        /// <param name="recordID">ID nhân viên đã tồn tại để lấy mã nhân viên tương ứng</param>
+        /// <returns>Số lượng mã đã tồn tại</returns>
+        /// Created by: NQDONG (18/11/2022)
+        public long CheckDuplicateCode(string recordCode, Guid recordID)
+        {
+            // Chuẩn bị câu lệnh SQL
+            string storeProcedureName = String.Format(Procedure.CHECK_DUPLICATE_CODE, typeof(T).Name);
+
+            // Chuẩn bị tham số đầu vào
+            var parameters = new DynamicParameters();
+
+            parameters.Add($"@{typeof(T).Name}Code", recordCode);
+            parameters.Add($"@{typeof(T).Name}ID", recordID);
+
+            using (var mySqlConnection = new MySqlConnection(connectionString))
+            {
+                // Thực hiện gọi vào DB
+                var numberOfDuplicate = mySqlConnection.QueryFirstOrDefault(storeProcedureName, parameters, commandType: CommandType.StoredProcedure);
+                return numberOfDuplicate.CountDuplicate;
+            }
+        }
+
         #endregion
     }
 }

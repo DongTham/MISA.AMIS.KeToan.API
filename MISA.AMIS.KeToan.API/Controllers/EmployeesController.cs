@@ -4,6 +4,7 @@ using MISA.AMIS.KeToan.BL;
 using MISA.AMIS.KeToan.Common.Resources;
 using MISA.AMIS.KeToan.Common.Enums;
 using ClosedXML.Excel;
+using MISA.AMIS.KeToan.Common.Exceptions;
 
 namespace MISA.AMIS.KeToan.API.Controllers
 {
@@ -49,7 +50,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
@@ -89,14 +90,14 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     TraceId = HttpContext.TraceIdentifier
                 });
             }
-            catch (Exception ex)
+            catch (ValidateException ex)
             {
-                Console.WriteLine(ex.Message);
+                
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
-                    ErrorCode = ErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
+                    ErrorCode = ex.ErrorCodeValidate,
+                    DevMsg = ex.Message,
+                    UserMsg = ex.Message,
                     MoreInfo = Resources.MoreInfo_Exception,
                     TraceId = HttpContext.TraceIdentifier
                 });
@@ -132,14 +133,13 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     TraceId = HttpContext.TraceIdentifier
                 });
             }
-            catch (Exception ex)
+            catch (ValidateException ex)
             {
-                Console.WriteLine(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
-                    ErrorCode = ErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
+                    ErrorCode = ex.ErrorCodeValidate,
+                    DevMsg = ex.Message,
+                    UserMsg = ex.Message,
                     MoreInfo = Resources.MoreInfo_Exception,
                     TraceId = HttpContext.TraceIdentifier
                 });
@@ -176,7 +176,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
@@ -218,7 +218,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
@@ -230,33 +230,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
         }
 
-        /// <summary>
-        /// API kiểm tra mã nhân viên đã tồn tại hay chưa
-        /// </summary>
-        /// <param name="employeeCode">Mã nhân viên muốn kiểm tra</param>
-        /// <returns>Kết quả đã tồn tại hay chưa</returns>
-        /// Created by: NQDONG (18/11/2022)
-        [HttpGet("checkDuplicateCode")]
-        public IActionResult CheckDuplicateEmployeeCode([FromQuery] string employeeCode)
-        {
-            try
-            {
-                var dataResult = _employeeBL.CheckDuplicateEmployeeCode(employeeCode);
-                return StatusCode(StatusCodes.Status200OK, new { IsDuplicateEmployeeCode = dataResult });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
-                {
-                    ErrorCode = ErrorCode.Exception,
-                    DevMsg = Resources.DevMsg_Exception,
-                    UserMsg = Resources.UserMsg_Exception,
-                    MoreInfo = Resources.MoreInfo_Exception,
-                    TraceId = HttpContext.TraceIdentifier
-                });
-            }
-        }
+        
 
         /// <summary>
         /// API Xuất khẩu file excel danh sách tất cả nhân viên
@@ -320,7 +294,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,

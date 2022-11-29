@@ -54,7 +54,6 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
@@ -89,7 +88,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
                     ErrorCode = ErrorCode.Exception,
@@ -137,13 +136,40 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, new
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
-                    ErrorCode = 1,
-                    DevMsg = "Catched an exception.",
-                    UserMsg = "Có lỗi xảy ra! Vui lòng liên hệ với MISA.",
-                    MoreInfo = "https://openapi.misa.com.vn/errorcode/1",
+                    ErrorCode = ErrorCode.Exception,
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Exception,
+                    MoreInfo = Resources.MoreInfo_Exception,
+                    TraceId = HttpContext.TraceIdentifier
+                });
+            }
+        }
+
+        /// <summary>
+        /// API kiểm tra mã thêm mới đã tồn tại hay chưa
+        /// </summary>
+        /// <param name="recordCode">Mã muốn kiểm tra</param>
+        /// <param name="recordID">ID nhân viên đã tồn tại để lấy mã nhân viên tương ứng</param>
+        /// <returns>Số lượng mã đã tồn tại</returns>
+        /// Created by: NQDONG (18/11/2022)
+        [HttpGet("checkDuplicateCode")]
+        public IActionResult CheckDuplicateCode([FromQuery] string recordCode, [FromQuery] Guid recordID)
+        {
+            try
+            {
+                var dataResult = _baseBL.CheckDuplicateCode(recordCode, recordID);
+                return StatusCode(StatusCodes.Status200OK, new { IsDuplicateCode = dataResult });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                {
+                    ErrorCode = ErrorCode.Exception,
+                    DevMsg = Resources.DevMsg_Exception,
+                    UserMsg = Resources.UserMsg_Exception,
+                    MoreInfo = Resources.MoreInfo_Exception,
                     TraceId = HttpContext.TraceIdentifier
                 });
             }

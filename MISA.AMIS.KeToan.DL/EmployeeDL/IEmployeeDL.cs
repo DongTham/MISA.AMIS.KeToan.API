@@ -49,13 +49,5 @@ namespace MISA.AMIS.KeToan.DL
         /// <returns>Status code 200</returns>
         /// Created by: NQDONG (10/11/2022)
         public ResultForAction DeleteMultipleEmployees(string employeeIDText);
-
-        /// <summary>
-        /// API kiểm tra mã nhân viên đã tồn tại hay chưa
-        /// </summary>
-        /// <param name="employeeCode">Mã nhân viên muốn kiểm tra</param>
-        /// <returns>Số lượng mã nhân viên đã tồn tại</returns>
-        /// Created by: NQDONG (18/11/2022)
-        public long CheckDuplicateEmployeeCode(string employeeCode);
     }
 }

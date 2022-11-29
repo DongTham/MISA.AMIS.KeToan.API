@@ -142,29 +142,7 @@ namespace MISA.AMIS.KeToan.DL
             }
         }
 
-        /// <summary>
-        /// API kiểm tra mã nhân viên đã tồn tại hay chưa
-        /// </summary>
-        /// <param name="employeeCode">Mã nhân viên muốn kiểm tra</param>
-        /// <returns>Số lượng mã nhân viên đã tồn tại</returns>
-        /// Created by: NQDONG (18/11/2022)
-        public long CheckDuplicateEmployeeCode(string employeeCode)
-        {
-            // Chuẩn bị câu lệnh SQL
-            string storeProcedureName = Procedure.CHECK_DUPLICATE_EMPLOYEECODE;
-
-            // Chuẩn bị tham số đầu vào
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@EmployeeCode", employeeCode);
-
-            using (var mySqlConnection = new MySqlConnection(connectionString))
-            {
-                // Thực hiện gọi vào DB
-                var numberOfDuplicate = mySqlConnection.QueryFirstOrDefault(storeProcedureName, parameters, commandType: CommandType.StoredProcedure);
-                return numberOfDuplicate.CountDuplicate;
-            }
-        }
+        
 
         #endregion
     }

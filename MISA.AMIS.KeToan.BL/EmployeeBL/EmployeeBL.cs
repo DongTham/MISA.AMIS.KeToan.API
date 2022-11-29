@@ -43,6 +43,9 @@ namespace MISA.AMIS.KeToan.BL
         /// Created by: NQDONG (10/11/2022)
         public ResultForAction InsertEmployee(Employee employee)
         {
+            //Kiểm tra dữ liệu nhập vào có hợp lệ hay không
+            ValidateData(employee);
+
             return _employeeDL.InsertEmployee(employee);
         }
 
@@ -55,6 +58,9 @@ namespace MISA.AMIS.KeToan.BL
         /// Created by: NQDONG (10/11/2022)
         public ResultForAction UpdateEmpoyee(Guid employeeID, Employee employee)
         {
+            //Kiểm tra dữ liệu nhập vào có hợp lệ hay không
+            ValidateData(employee);
+
             return _employeeDL.UpdateEmpoyee(employeeID, employee);
         }
 
@@ -129,26 +135,6 @@ namespace MISA.AMIS.KeToan.BL
                     return "Khác";
                 default:
                     return gender.ToString();
-            }
-        }
-
-        /// <summary>
-        /// API kiểm tra mã nhân viên đã tồn tại hay chưa
-        /// </summary>
-        /// <param name="employeeCode">Mã nhân viên muốn kiểm tra</param>
-        /// <returns>Kết quả đã tồn tại hay chưa</returns>
-        /// Created by: NQDONG (18/11/2022)
-        public bool CheckDuplicateEmployeeCode(string employeeCode)
-        {
-            var result = _employeeDL.CheckDuplicateEmployeeCode(employeeCode);
-
-            if(result == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
             }
         }
 

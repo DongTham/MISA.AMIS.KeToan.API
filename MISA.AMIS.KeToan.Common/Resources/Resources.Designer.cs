@@ -70,6 +70,24 @@ namespace MISA.AMIS.KeToan.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã nhân viên không được để trống!.
+        /// </summary>
+        public static string EmployeeCode_NotEmpty {
+            get {
+                return ResourceManager.GetString("EmployeeCode_NotEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} không được để trống!.
+        /// </summary>
+        public static string InfoNotEmpty {
+            get {
+                return ResourceManager.GetString("InfoNotEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://openapi.misa.com.vn/errorcode/1.
         /// </summary>
         public static string MoreInfo_Exception {
@@ -84,6 +102,15 @@ namespace MISA.AMIS.KeToan.Common.Resources {
         public static string UserMsg_Exception {
             get {
                 return ResourceManager.GetString("UserMsg_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dữ liệu không hợp lệ, Vui lòng kiểm tra lại!.
+        /// </summary>
+        public static string ValidateException {
+            get {
+                return ResourceManager.GetString("ValidateException", resourceCulture);
             }
         }
     }

@@ -15,12 +15,12 @@
         /// <summary>
         /// Mã của đơn vị
         /// </summary>
-        public string DepartmentCode { get; set; }
+        public string? DepartmentCode { get; set; }
 
         /// <summary>
         /// Tên của đơn vị
         /// </summary>
-        public string DepartmentName { get; set; }
+        public string? DepartmentName { get; set; }
 
         #endregion
     }
