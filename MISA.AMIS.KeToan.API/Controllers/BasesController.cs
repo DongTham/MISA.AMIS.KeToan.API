@@ -50,9 +50,9 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     return StatusCode(StatusCodes.Status200OK, records);
                 }
 
-                return StatusCode(StatusCodes.Status200OK, new List<T>());
+                return StatusCode(StatusCodes.Status404NotFound);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
@@ -86,7 +86,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
 
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
@@ -125,16 +125,15 @@ namespace MISA.AMIS.KeToan.API.Controllers
             {
                 var dataResult = _baseBL.GetRecordsByFilter(keyword, sort, order, ids, pageSize, pageNumber);
 
-                return StatusCode(StatusCodes.Status200OK, new { dataResult });
-                // Xử lý kết quả trả về
-                //if (records.Count > 0)
-                //{
-                //    return StatusCode(StatusCodes.Status200OK, new { records, totalRecord, totalPage });
-                //}
+                //Xử lý kết quả trả về
+                if (dataResult.totalRecords > 0)
+                {
+                    return StatusCode(StatusCodes.Status200OK, new { dataResult });
+                }
 
-                //return StatusCode(StatusCodes.Status200OK, new { records = new List<Record>(), totalRecord, totalPage });
+                return StatusCode(StatusCodes.Status404NotFound);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {
@@ -155,14 +154,14 @@ namespace MISA.AMIS.KeToan.API.Controllers
         /// <returns>Số lượng mã đã tồn tại</returns>
         /// Created by: NQDONG (18/11/2022)
         [HttpGet("checkDuplicateCode")]
-        public IActionResult CheckDuplicateCode([FromQuery] string recordCode, [FromQuery] Guid recordID)
+        public IActionResult CheckDuplicateCode([FromQuery] string recordCode, [FromQuery] Guid? recordID)
         {
             try
             {
                 var dataResult = _baseBL.CheckDuplicateCode(recordCode, recordID);
                 return StatusCode(StatusCodes.Status200OK, new { IsDuplicateCode = dataResult });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
                 {

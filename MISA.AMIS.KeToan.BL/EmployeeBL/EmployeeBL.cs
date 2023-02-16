@@ -1,8 +1,13 @@
-﻿using MISA.AMIS.KeToan.Common.Entities;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
+using MISA.AMIS.KeToan.Common.Entities;
 using MISA.AMIS.KeToan.Common.Entities.DTO;
 using MISA.AMIS.KeToan.Common.Enums;
 using MISA.AMIS.KeToan.DL;
 using System.Data;
+using DataTable = System.Data.DataTable;
 
 namespace MISA.AMIS.KeToan.BL
 {
@@ -30,7 +35,7 @@ namespace MISA.AMIS.KeToan.BL
         /// </summary>
         /// <returns>Mã nhân viên lớn nhất</returns>
         /// Created by: NQDONG (10/11/2022)
-        public dynamic GetBiggestEmployeeCode()
+        public dynamic? GetBiggestEmployeeCode()
         {
             return _employeeDL.GetBiggestEmployeeCode();
         }
@@ -98,10 +103,21 @@ namespace MISA.AMIS.KeToan.BL
         /// </summary>
         /// <returns>Dữ liệu DataTable để xuất file</returns>
         /// Created by: NQDONG (18/11/2022)
-        public DataTable ExportEmployeesToExcel()
+        public XLWorkbook ExportEmployeesToExcel(string? keyword, string? sort, string? order, string? ids, int pageSize, int pageNumber)
         {
             // Lấy danh sách tất cả nhân viên
-            var employees = _employeeDL.GetAllRecords();
+            //var employees = _employeeDL.GetAllRecords();
+            int offset = pageSize * (pageNumber - 1);
+            if (string.IsNullOrEmpty(sort))
+            {
+                sort = $"EmployeeID";
+            }
+            if (string.IsNullOrEmpty(ids))
+            {
+                ids = "NoID";
+            }
+
+            var employees = _employeeDL.GetRecordsByFilter(keyword, sort, order, ids, pageSize, offset);
 
             // using System.Data;
             DataTable dataTable = new()
@@ -113,14 +129,55 @@ namespace MISA.AMIS.KeToan.BL
             dataTable.Columns.AddRange(new DataColumn[9] {new DataColumn("STT"), new DataColumn("Mã nhân viên"), new DataColumn("Tên nhân viên"), new DataColumn("Giới tính"), new DataColumn("Ngày sinh"), new DataColumn("Chức danh"), new DataColumn("Tên đơn vị"), new DataColumn("Số tài khoản"), new DataColumn("Tên ngân hàng") });
 
             int indexOfEmployee = 1;
-            foreach (var employee in employees)
+            foreach (var employee in employees.Data)
             {
                 // Thêm dữ liệu của từng nhân viên cho 1 hàng
                 dataTable.Rows.Add(indexOfEmployee, employee.EmployeeCode, employee.EmployeeName, ConvertToGenderVietnamese(employee.Gender), employee.DateOfBirth?.ToString("dd-MM-yyyy"), employee.JobPositionName, employee.DepartmentName, employee.BankAccountNumber, employee.BankName);
                 indexOfEmployee++;
             }
 
-            return dataTable;
+            //using ClosedXML.Excel;
+            XLWorkbook wb = new XLWorkbook();
+            
+            var ws = wb.AddWorksheet(dataTable);
+
+            // Điều chỉnh độ rộng của ô vừa với độ dài của dữ liệu
+            ws.Columns("A:I").AdjustToContents();
+
+            // Tùy chỉnh style cho cột từ A đến I
+            ws.Columns("A:I").Style.Font.SetFontName("Times New Roman").Font.SetFontSize(11).Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left).Alignment.SetWrapText(true);
+
+            // Lấy dòng đầu tiên của bảng tính
+            var table = ws.Tables.FirstOrDefault();
+            if (table != null)
+            {
+                // Bỏ filter của bảng
+                table.ShowAutoFilter = false;
+
+                // Set kiểu viền và màu cho background
+                table.Cells().Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin).Fill.SetBackgroundColor(XLColor.White);
+
+                // Tùy chỉnh style cho header của bảng
+                table.Row(1).Style.Font.SetFontColor(XLColor.FromTheme(XLThemeColor.Text1)).Fill.SetBackgroundColor(XLColor.LightGray).Font.SetFontName("Arial").Font.SetFontSize(10).Font.SetBold(true).Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                // Căn giữa cho văn bản ở cột E (Ngày sinh)
+                table.Column("E").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            }
+
+            // Thêm 2 dòng phía trên
+            ws.Row(1).InsertRowsAbove(2);
+
+            // Gán giá trị cho ô A1
+            ws.Cell("A1").SetValue("DANH SÁCH NHÂN VIÊN");
+
+            // Tùy chỉnh style cho ô A1 và A2
+            ws.Cells("A1,A2").Style.Font.SetBold(true).Font.SetFontSize(16).Font.SetFontName("Arial").Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+            // Merge từ A1 đến I1, từ A2 đến I2
+            ws.Range("A1:I1").Merge();
+            ws.Range("A2:I2").Merge();
+
+            return wb;
         }
 
         private string? ConvertToGenderVietnamese(int? gender)

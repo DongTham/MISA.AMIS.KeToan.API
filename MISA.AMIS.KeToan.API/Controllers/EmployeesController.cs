@@ -41,14 +41,14 @@ namespace MISA.AMIS.KeToan.API.Controllers
                 var employeeCode = _employeeBL.GetBiggestEmployeeCode();
 
                 // Xử lý kết quả trả về
-                if (employeeCode != null)
+                if (employeeCode != null && employeeCode.EmployeeCode != null)
                 {
                     return StatusCode(StatusCodes.Status200OK, employeeCode);
-                }
+                }  
 
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
@@ -81,12 +81,12 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     return StatusCode(StatusCodes.Status201Created, new { EmployeeID = dataResult.RecordID });
                 }
 
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                 {
                     ErrorCode = ErrorCode.InvalidData,
-                    DevMsg = "Database insert failed.",
-                    UserMsg = "Thêm mới nhân viên thất bại.",
-                    MoreInfo = "https://openapi.misa.com.vn/errorcode/2",
+                    DevMsg = Resources.DevMsg_Insert_Failed,
+                    UserMsg = Resources.UserMsg_Insert_Failed,
+                    MoreInfo = Resources.MoreInfo_Failed,
                     TraceId = HttpContext.TraceIdentifier
                 });
             }
@@ -124,12 +124,12 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     return StatusCode(StatusCodes.Status200OK, dataResult.RecordID);
                 }
 
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                 {
                     ErrorCode = ErrorCode.InvalidData,
-                    DevMsg = "Database update failed.",
-                    UserMsg = "Cập nhật nhân viên thất bại.",
-                    MoreInfo = "https://openapi.misa.com.vn/errorcode/2",
+                    DevMsg = Resources.DevMsg_Update_Failed,
+                    UserMsg = Resources.UserMsg_Update_Failed,
+                    MoreInfo = Resources.MoreInfo_Failed,
                     TraceId = HttpContext.TraceIdentifier
                 });
             }
@@ -165,16 +165,16 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     return StatusCode(StatusCodes.Status200OK, dataResult.RecordID);
                 }
 
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                 {
                     ErrorCode = ErrorCode.InvalidData,
-                    DevMsg = "Database delete failed.",
-                    UserMsg = "Xóa nhân viên thất bại.",
-                    MoreInfo = "https://openapi.misa.com.vn/errorcode/2",
+                    DevMsg = Resources.DevMsg_Delete_Failed,
+                    UserMsg = Resources.UserMsg_Delete_Failed,
+                    MoreInfo = Resources.MoreInfo_Failed,
                     TraceId = HttpContext.TraceIdentifier
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
@@ -207,16 +207,16 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     return StatusCode(StatusCodes.Status200OK);
                 }
 
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
+                return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                 {
                     ErrorCode = ErrorCode.InvalidData,
-                    DevMsg = "Database delete multiple failed.",
-                    UserMsg = "Xóa nhiều nhân viên thất bại.",
-                    MoreInfo = "https://openapi.misa.com.vn/errorcode/2",
+                    DevMsg = Resources.DevMsg_DeleteBatch_Failed,
+                    UserMsg = Resources.UserMsg_DeleteBatch_Failed,
+                    MoreInfo = Resources.MoreInfo_Failed,
                     TraceId = HttpContext.TraceIdentifier
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
@@ -238,61 +238,23 @@ namespace MISA.AMIS.KeToan.API.Controllers
         /// <returns>file excel thông tin tất cả nhân viên</returns>
         /// Created by: NQDONG (18/11/2022)
         [HttpGet("exportAllRecord")]
-        public IActionResult ExportEmployeesToExcel()
+        public IActionResult ExportEmployeesToExcel([FromQuery] string? keyword,
+            [FromQuery] string? sort,
+            [FromQuery] string? ids,
+            [FromQuery] string? order = "ASC",
+            [FromQuery] int pageSize = 25,
+            [FromQuery] int pageNumber = 1)
         {
             try
             {
-                var dataResult = _employeeBL.ExportEmployeesToExcel();
-
-                //using ClosedXML.Excel;
-                using (XLWorkbook wb = new XLWorkbook())
+                var dataResult = _employeeBL.ExportEmployeesToExcel(keyword, sort, order, ids, pageSize, pageNumber);
+                using (MemoryStream stream = new MemoryStream())
                 {
-                    var ws = wb.AddWorksheet(dataResult);
-
-                    // Điều chỉnh độ rộng của ô vừa với độ dài của dữ liệu
-                    ws.Columns("A:I").AdjustToContents();
-
-                    // Tùy chỉnh style cho cột từ A đến I
-                    ws.Columns("A:I").Style.Font.SetFontName("Times New Roman").Font.SetFontSize(11).Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left).Alignment.SetWrapText(true);
-
-                    // Lấy dòng đầu tiên của bảng tính
-                    var table = ws.Tables.FirstOrDefault();
-                    if (table != null)
-                    {
-                        // Bỏ filter của bảng
-                        table.ShowAutoFilter = false;
-
-                        // Set kiểu viền và màu cho background
-                        table.Cells().Style.Border.SetOutsideBorder(XLBorderStyleValues.Thin).Fill.SetBackgroundColor(XLColor.White);
-
-                        // Tùy chỉnh style cho header của bảng
-                        table.Row(1).Style.Font.SetFontColor(XLColor.FromTheme(XLThemeColor.Text1)).Fill.SetBackgroundColor(XLColor.LightGray).Font.SetFontName("Arial").Font.SetFontSize(10).Font.SetBold(true).Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-
-                        // Căn giữa cho văn bản ở cột E (Ngày sinh)
-                        table.Column("E").Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-                    }
-
-                    // Thêm 2 dòng phía trên
-                    ws.Row(1).InsertRowsAbove(2);
-
-                    // Gán giá trị cho ô A1
-                    ws.Cell("A1").SetValue("DANH SÁCH NHÂN VIÊN");
-
-                    // Tùy chỉnh style cho ô A1 và A2
-                    ws.Cells("A1,A2").Style.Font.SetBold(true).Font.SetFontSize(16).Font.SetFontName("Arial").Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-
-                    // Merge từ A1 đến I1, từ A2 đến I2
-                    ws.Range("A1:I1").Merge();
-                    ws.Range("A2:I2").Merge();
-
-                    using (MemoryStream stream = new MemoryStream())
-                    {
-                        wb.SaveAs(stream);
-                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Danh_sach_nhan_vien" + DateTime.Now.ToString("dd-MM-yyyy hh-mm-ss") + ".xlsx");
-                    }
+                    dataResult.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult
@@ -306,29 +268,6 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
 
         }
-
-        //private ServiceResponse ValidateRequestData(Employee employee)
-        //{
-        //    var properties = typeof(Employee).GetProperties();
-        //    var validateFailures = new List<string>();
-        //    foreach(var property in properties)
-        //    {
-        //        var propertyValue = property.GetValue(employee);
-        //        var requiredAttribute = (RequiredAttribute?)Attribute.GetCustomAttribute(property, typeof(RequiredAttribute));
-        //        if(requiredAttribute != null && string.IsNullOrEmpty(propertyValue?.ToString()))
-        //        {
-        //            validateFailures.Add(requiredAttribute.ErrorMessage);
-        //        }
-        //    }
-
-        //    if(validateFailures.Count > 0)
-        //    {
-        //        return new ServiceResponse
-        //        {
-        //            Success = false
-        //        }
-        //    }
-        //}
 
         #endregion
     }

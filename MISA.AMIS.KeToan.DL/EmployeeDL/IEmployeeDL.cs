@@ -15,7 +15,7 @@ namespace MISA.AMIS.KeToan.DL
         /// </summary>
         /// <returns>Mã nhân viên lớn nhất</returns>
         /// Created by: NQDONG (10/11/2022)
-        public dynamic GetBiggestEmployeeCode();
+        public dynamic? GetBiggestEmployeeCode();
 
         /// <summary>
         /// API Thêm mới 1 nhân viên

@@ -84,6 +84,11 @@ namespace MISA.AMIS.KeToan.DL
             // Chuẩn bị tham số đầu vào
             var parameters = new DynamicParameters();
 
+            if (string.IsNullOrEmpty(ids))
+            {
+                ids = Guid.Empty.ToString();
+            }
+
             parameters.Add("@Keyword", keyword);
             parameters.Add("@Sort", sort);
             parameters.Add("@Limit", pageSize);

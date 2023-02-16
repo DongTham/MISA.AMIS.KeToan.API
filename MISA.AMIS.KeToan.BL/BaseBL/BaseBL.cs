@@ -80,9 +80,13 @@ namespace MISA.AMIS.KeToan.BL
         /// <param name="recordID">ID nhân viên đã tồn tại để lấy mã nhân viên tương ứng</param>
         /// <returns>Số lượng mã đã tồn tại</returns>
         /// Created by: NQDONG (18/11/2022)
-        public bool CheckDuplicateCode(string recordCode, Guid recordID)
+        public bool CheckDuplicateCode(string recordCode, Guid? recordID)
         {
-            var result = _baseDL.CheckDuplicateCode(recordCode, recordID);
+            if (recordID == null)
+            {
+                recordID = Guid.Empty;
+            }
+            var result = _baseDL.CheckDuplicateCode(recordCode, (Guid)recordID);
 
             if (result == 0)
             {

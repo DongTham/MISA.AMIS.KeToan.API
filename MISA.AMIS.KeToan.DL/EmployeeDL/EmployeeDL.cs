@@ -18,7 +18,7 @@ namespace MISA.AMIS.KeToan.DL
 
         #region Method
 
-        public dynamic GetBiggestEmployeeCode()
+        public dynamic? GetBiggestEmployeeCode()
         {
             // Chuẩn bị câu lệnh SQL
             string storeProcedureName = Procedure.GET_BIGGEST_CODE_EMPLOYEE;
@@ -26,8 +26,8 @@ namespace MISA.AMIS.KeToan.DL
             // Khởi tạo kết nối tới DB MySQL
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
-                var employeeCode = mySqlConnection.Query(storeProcedureName, commandType: CommandType.StoredProcedure);
-                return employeeCode;
+                var employeeCode = mySqlConnection.Query<dynamic>(storeProcedureName, commandType: CommandType.StoredProcedure);
+                return employeeCode.FirstOrDefault();
             }
         }
 
@@ -53,8 +53,26 @@ namespace MISA.AMIS.KeToan.DL
             // Khởi tạo kết nối tới DB MySQL
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
-                var EmployeeID = mySqlConnection.QueryFirstOrDefault(storeProcedureName, parameters, commandType: CommandType.StoredProcedure);
-                return new ResultForAction { RecordID = EmployeeID?.EmployeeID };
+                mySqlConnection.Open();
+                var transaction = mySqlConnection.BeginTransaction();
+
+                try
+                {
+                    var EmployeeID = mySqlConnection.QueryFirstOrDefault(storeProcedureName, parameters, commandType: CommandType.StoredProcedure, transaction: transaction);
+                    transaction.Commit();
+                    return new ResultForAction { RecordID = EmployeeID?.EmployeeID };
+                }
+                catch
+                (Exception e)
+                {
+                    Console.WriteLine(e);
+                    transaction.Rollback();
+                    return new ResultForAction { NumberOfRowsAffected = 0, RecordID = Guid.Empty };
+                }
+                finally
+                {
+                    mySqlConnection.Close();
+                }
             }
         }
 
@@ -84,14 +102,31 @@ namespace MISA.AMIS.KeToan.DL
                 {
                     parameters.Add("@" + prop.Name, prop.GetValue(employee, null));
                 }
-
             }
 
             // Khởi tạo kết nối tới DB MySQL
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
-                int numberOfRowsAffected = mySqlConnection.Execute(storeProcedureName, parameters, commandType: CommandType.StoredProcedure);
-                return new ResultForAction { RecordID = employeeID, NumberOfRowsAffected = numberOfRowsAffected };
+                mySqlConnection.Open();
+                var transaction = mySqlConnection.BeginTransaction();
+
+                try
+                {
+                    int numberOfRowsAffected = mySqlConnection.Execute(storeProcedureName, parameters, commandType: CommandType.StoredProcedure, transaction: transaction);
+                    transaction.Commit();
+                    return new ResultForAction { RecordID = employeeID, NumberOfRowsAffected = numberOfRowsAffected };
+                }
+                catch
+                (Exception e)
+                {
+                    Console.WriteLine(e);
+                    transaction.Rollback();
+                    return new ResultForAction { NumberOfRowsAffected = 0, RecordID = Guid.Empty };
+                }
+                finally
+                {
+                    mySqlConnection.Close();
+                }
             }
         }
 
@@ -112,9 +147,27 @@ namespace MISA.AMIS.KeToan.DL
 
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
-                // Thực hiện gọi vào DB
-                int numberOfRowsAffected = mySqlConnection.Execute(storeProcedureName, parameters, commandType: CommandType.StoredProcedure);
-                return new ResultForAction { RecordID = employeeID, NumberOfRowsAffected = numberOfRowsAffected };
+                mySqlConnection.Open();
+                var transaction = mySqlConnection.BeginTransaction();
+
+                try
+                {
+                    // Thực hiện gọi vào DB
+                    int numberOfRowsAffected = mySqlConnection.Execute(storeProcedureName, parameters, commandType: CommandType.StoredProcedure, transaction: transaction);
+                    transaction.Commit();
+                    return new ResultForAction { RecordID = employeeID, NumberOfRowsAffected = numberOfRowsAffected };
+                }
+                catch
+                (Exception e)
+                {
+                    Console.WriteLine(e);
+                    transaction.Rollback();
+                    return new ResultForAction { NumberOfRowsAffected = 0, RecordID = Guid.Empty };
+                }
+                finally
+                {
+                    mySqlConnection.Close();
+                }
             }
         }
 
@@ -136,13 +189,29 @@ namespace MISA.AMIS.KeToan.DL
 
             using (var mySqlConnection = new MySqlConnection(connectionString))
             {
-                // Thực hiện gọi vào DB
-                int numberOfRowsAffected = mySqlConnection.Execute(storeProcedureName, parameters, commandType: CommandType.StoredProcedure);
-                return new ResultForAction { NumberOfRowsAffected = numberOfRowsAffected };
+                mySqlConnection.Open();
+                var transaction = mySqlConnection.BeginTransaction();
+
+                try
+                {
+                    // Thực hiện gọi vào DB
+                    int numberOfRowsAffected = mySqlConnection.Execute(storeProcedureName, parameters, commandType: CommandType.StoredProcedure, transaction: transaction);
+                    transaction.Commit();
+                    return new ResultForAction { NumberOfRowsAffected = numberOfRowsAffected };
+                }
+                catch
+                (Exception e)
+                {
+                    Console.WriteLine(e);
+                    transaction.Rollback();
+                    return new ResultForAction { NumberOfRowsAffected = 0, RecordID = Guid.Empty };
+                }
+                finally
+                {
+                    mySqlConnection.Close();
+                }
             }
         }
-
-        
 
         #endregion
     }

@@ -1,4 +1,8 @@
-﻿using MISA.AMIS.KeToan.Common.Entities;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
+using MISA.AMIS.KeToan.Common.Entities;
 using MISA.AMIS.KeToan.Common.Entities.DTO;
 using System.Data;
 
@@ -11,7 +15,7 @@ namespace MISA.AMIS.KeToan.BL
         /// </summary>
         /// <returns>Mã nhân viên lớn nhất</returns>
         /// Created by: NQDONG (10/11/2022)
-        public dynamic GetBiggestEmployeeCode();
+        public dynamic? GetBiggestEmployeeCode();
 
         /// <summary>
         /// API Thêm mới 1 nhân viên
@@ -51,6 +55,6 @@ namespace MISA.AMIS.KeToan.BL
         /// </summary>
         /// <returns>Dữ liệu DataTable để xuất file</returns>
         /// Created by: NQDONG (18/11/2022)
-        public DataTable ExportEmployeesToExcel();
+        public XLWorkbook ExportEmployeesToExcel(string? keyword, string? sort, string? order, string? ids, int pageSize, int pageNumber);
     }
 }

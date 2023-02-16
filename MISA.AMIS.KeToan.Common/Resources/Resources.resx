@@ -117,9 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DevMsg_DeleteBatch_Failed" xml:space="preserve">
+    <value>Database delete batch failed.</value>
+    <comment>Message trả về cho dev khi API xóa nhiều thất bại</comment>
+  </data>
+  <data name="DevMsg_Delete_Failed" xml:space="preserve">
+    <value>Database delete failed.</value>
+    <comment>Message trả về cho dev khi API xóa thất bại</comment>
+  </data>
   <data name="DevMsg_Exception" xml:space="preserve">
     <value>Catched an exception.</value>
     <comment>Message trả về cho dev khi API gặp exception</comment>
+  </data>
+  <data name="DevMsg_Insert_Failed" xml:space="preserve">
+    <value>Database insert failed.</value>
+    <comment>Message trả về cho dev khi API thêm mới thất bại</comment>
+  </data>
+  <data name="DevMsg_Update_Failed" xml:space="preserve">
+    <value>Database update failed.</value>
+    <comment>Message trả về cho dev khi API cập nhật thất bại</comment>
   </data>
   <data name="EmployeeCode_NotEmpty" xml:space="preserve">
     <value>Mã nhân viên không được để trống!</value>
@@ -133,9 +149,29 @@
     <value>https://openapi.misa.com.vn/errorcode/1</value>
     <comment>Thông tin chi tiết của lỗi khi gọi API gặp exception</comment>
   </data>
+  <data name="MoreInfo_Failed" xml:space="preserve">
+    <value>https://openapi.misa.com.vn/errorcode/2</value>
+    <comment>Thông tin chi tiết của lỗi khi gọi API bị thất bại</comment>
+  </data>
+  <data name="UserMsg_DeleteBatch_Failed" xml:space="preserve">
+    <value>Xóa nhiều nhân viên thất bại.</value>
+    <comment>Message trả về cho user khi API xóa nhiều thất bại</comment>
+  </data>
+  <data name="UserMsg_Delete_Failed" xml:space="preserve">
+    <value>Xóa nhân viên thất bại.</value>
+    <comment>Message trả về cho user khi API xóa thất bại</comment>
+  </data>
   <data name="UserMsg_Exception" xml:space="preserve">
     <value>Có lỗi xảy ra! Vui lòng liên hệ với MISA.</value>
     <comment>Message trả về cho user khi API gặp exception</comment>
+  </data>
+  <data name="UserMsg_Insert_Failed" xml:space="preserve">
+    <value>Thêm mới nhân viên thất bại.</value>
+    <comment>Message trả về cho user khi API thêm mới thất bại</comment>
+  </data>
+  <data name="UserMsg_Update_Failed" xml:space="preserve">
+    <value>Cập nhật nhân viên thất bại.</value>
+    <comment>Message trả về cho user khi API cập nhật thất bại</comment>
   </data>
   <data name="ValidateException" xml:space="preserve">
     <value>Dữ liệu không hợp lệ, Vui lòng kiểm tra lại!</value>

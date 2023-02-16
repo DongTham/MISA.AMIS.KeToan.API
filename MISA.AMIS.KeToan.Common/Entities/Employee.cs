@@ -40,7 +40,7 @@ namespace MISA.AMIS.KeToan.Common.Entities
         /// <summary>
         /// Có phải là nhà cung cấp hay không
         /// </summary>
-        public bool IsSuplier { get; set; }
+        public bool IsSupplier { get; set; }
 
         /// <summary>
         /// Giới tính
