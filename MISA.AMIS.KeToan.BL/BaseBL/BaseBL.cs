@@ -88,14 +88,16 @@ namespace MISA.AMIS.KeToan.BL
             }
             var result = _baseDL.CheckDuplicateCode(recordCode, (Guid)recordID);
 
-            if (result == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return result != 0;
+
+            //if (result == 0)
+            //{
+            //    return false;
+            //}
+            //else
+            //{
+            //    return true;
+            //}
         }
 
         /// <summary>
